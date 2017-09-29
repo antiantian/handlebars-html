@@ -1,0 +1,91 @@
+{{#partial "title"}}
+完善银行卡信息
+{{/partial}}
+{{#head 'headmess'}}
+<a href="javascript:window.history.go(-1);" class="iconfont left_icon">&#xe62d;</a>
+<h2 class="head_title">完善银行卡信息</h2>
+{{/head}}
+{{#partial "content" }}
+<form method="post" id="detailForm">
+   <div style="background:#fff;">
+        <div class="inner_common maxWrap">
+            <div class="bankCardInfo-input-row">
+                <label>卡类型</label>
+                <span>{{bankName}} {{cardType}}</span>
+            </div>
+            <div class="bankCardInfo-input-row">
+                <label>预留手机号</label>
+                <input type="search" name="phone" placeholder="请输入手机号" id="phone"/>
+            </div>
+            {{#if credit}}
+            <div class="bankCardInfo-input-row">
+                <label>有效期</label>
+                <label style="width:15%;float:right;">月/年</label>
+                <input style="width:60%;" type="text" name="expirationDate" placeholder="格式：08/17" id="expirationDate"/>       
+            </div> 
+            <div class="bankCardInfo-input-row">
+                <label>CV2</label>
+                <label style="width:15%;float:right;">卡背后三位</label>
+                <input style="width:60%;" type="search" name="cvn2" placeholder="格式：123" id="cvn2"/>       
+            </div> 
+            {{/if}}
+        </div>
+     </div>   
+     <p class="error_msg inner_common maxWrap"></p>
+     <p class="bankCardInfo_a inner_common maxWrap" style="text-align:left; margin-top:10px;"><a href="###">《同意快捷支付服务协议》</a></p>
+     <button class="common_btn" type="button" onclick="bankCardDetail()">下一步</button>
+     <div class="container inner_common"> 
+        <p class="bankCardInfo_a"><span>以上信息仅于银行验证</span></p>
+     </div>    
+    <input type="hidden" value="{{name}}" name="name" />
+    <input type="hidden" value="{{idCard}}" name="idCard" />
+    <input type="hidden" value="{{bankCard}}" name="bankCard" />
+    <input type="hidden" value="{{bankName}}" name="bankName" />
+    <input type="hidden" value="{{credit}}" name="credit" />
+    <input type="hidden" id="payCode" value="{{payCode}}" name="payCode"/>
+    <input type="hidden" id="types" value="2" name="type"/>
+</form>
+{{/partial}}
+{{> base}}
+
+{{#partial 'js'}}
+<script type="text/javascript" src="/static/js/Verification.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var token=getQueryString('token');
+        document.getElementById('detailForm').action="/cashier/bankCardDetail?token="+token+"&&type=2";
+
+    })
+    function bankCardDetail(){
+        var phone = $('#phone').val();
+        if(phone==''){
+            $('.error_msg').html('请输入手机号');
+            return false;
+        }else if(!(/^1[34578]\d{9}$/.test(phone))){ 
+            $('.error_msg').html('请输入正确的手机号');
+            return false;
+        }else if(document.getElementById('expirationDate')){
+                    var expirationDate = $('#expirationDate').val();
+                    var cvn2 = $('#cvn2').val();
+                    if(expirationDate==''){
+                       $('.error_msg').html('请输入日期'); 
+                       return false;
+                    }else if(!(/^(?:0?\d|1[12])\/(\d{2})$/.test(expirationDate))){ 
+                        $('.error_msg').html('请输入正确的日期格式');
+                        return false;
+                    }else if(cvn2==''){
+                       $('.error_msg').html('请输入cvn2卡号'); 
+                       return false;
+                    }else if(!(/^[0-9]{3}$/.test(cvn2))){ 
+                        $('.error_msg').html('请输入正确的cvn2卡号');
+                        return false;
+                    }else{
+                       document.getElementById("detailForm").submit();
+                    }
+        }else{
+            document.getElementById("detailForm").submit();
+        }      
+  }
+
+</script>
+{{/partial}}

@@ -1,0 +1,75 @@
+{{#partial "title"}}
+添加银行卡
+{{/partial}}
+{{#head 'headmess'}}
+<a href="javascript:window.history.go(-1);" class="iconfont left_icon">&#xe62d;</a>
+<h2 class="head_title">添加银行卡</h2>
+{{/head}}
+{{#partial "content" }}
+    <div class="card_info">     
+           <form  method="post" id="infoForm">
+                <div style="background:#fff;">
+                    <div class="inner_common maxWrap">
+                        <div class="bankCardInfo-input-row">
+                            <label>持卡人</label>
+                            <input type="search" name="name" placeholder="请输入持卡人姓名" id="name"/>
+                        </div>
+                        <div class="bankCardInfo-input-row">
+                            <label>身份证号</label>
+                            <input type="search" name="idCard" placeholder="请输入身份证号" id="idCard"/>
+                        </div>
+                        <div class="bankCardInfo-input-row">
+                            <label>卡号</label>
+                            <input type="search" name="bankCard" placeholder="请输入银行卡号" id="bankCard"/>
+                        </div> 
+                    </div>
+                </div>  
+                <p class="error_msg inner_common maxWrap"></p>  
+                <div class="inner_common">
+                    <button class="common_btn" type="button" onclick="bankCardInfo();">下一步</button>
+                    <p class="bankCardInfo_a"><a href="###">查看支持银行</a></p>
+                </div>    
+                <input type="hidden" id="payCode" value="{{payCode}}" name="payCode"/>
+            </form>    
+    </div>
+{{/partial}}	
+{{> base}}	
+{{#partial 'js'}}
+<script type="text/javascript" src="/static/js/Verification.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var token=getQueryString('token');
+        //var payCode=getQueryString('payCode');
+        //document.getElementById('payCode').value=payCode;
+        document.getElementById('infoForm').action="/cashier/bankCardDetail?token="+token;
+
+    })
+    function bankCardInfo(){
+        var name = $('#name').val();
+        var idCard = $('#idCard').val();
+        var bankCard = $('#bankCard').val();
+        if(name==''){
+            $('.error_msg').html('请输入持卡人姓名');
+            return false;
+        }else if(!(/^[\u4E00-\u9FA5]{1,6}$/.test(name))){ 
+            $('.error_msg').html('请输入持卡人中文姓名');
+            return false;
+        }else if(idCard==''){
+           $('.error_msg').html('请输入身份证号'); 
+           return false;
+        }else if(!(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(idCard))){ 
+            $('.error_msg').html('请输入正确的身份证');
+            return false;
+        }else if(bankCard==''){
+           $('.error_msg').html('请输入银行卡号'); 
+           return false;
+        }else if(!(/^[0-9]{16,19}$/.test(bankCard))){ 
+            $('.error_msg').html('请输入正确的银行卡号');
+            return false;
+        }else{
+           document.getElementById("infoForm").submit();
+        }      
+  }
+
+</script>
+{{/partial}}

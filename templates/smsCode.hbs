@@ -1,0 +1,71 @@
+{{#partial "content"}}
+<div class="smsCode_wrap">
+ <div class="bgwhite">
+   <div class="maxWrap inner_common"> 
+	   <p class="smsCode_amount">￥{{payConfig.amount}}</p>
+	   <p class="smsCode_phone">已发送至手机号：{{payConfig.phone}}<p>
+	</div>
+ </div>  
+   <form  id="formid" method='post' action='/cashier/submit' >
+        <div class="bgwhite innerFrom">
+          <div class="maxWrap inner_common">  
+			<ul class="smsCode_List">
+			  <li class="zcode box_S" id="imgCode">
+	             <div class="inner">
+	                <i class="iconfont gray txt">&#xe8ee;</i>
+				    <input type="text" onchange='hideError(this)' class="textArea box_S" id="code" name="code" placeholder="请输入短信验证码"/>
+	             </div>
+				<div  id="getCode" dataOption="1" class="smsCode_code radius3">
+				  获取验证码
+				</div>
+			  </li>
+			  {{#unless credit}}
+	              <li class="passwd">
+					<i class="iconfont gray txt">&#xe630;</i>
+					<input type="text" onchange='hideError(this)'  class="textArea box_S" id="password" name="password" placeholder="请输入支付密码"/>
+				  </li>
+			  {{/unless}} 
+			</ul>
+	      </div>
+	    </div> 
+	    <div class="maxWrap"> 		
+			<p class="error_mess" id="error_mess">{{errormess}}</p>	
+			<button  type="button"  onclick = "checkUser();"  value="" class="common_btn">确认支付</button>
+	    </div> 		
+		</form>
+</div>
+{{/partial}}
+{{#partial 'js'}}
+<script>
+//隐藏错误信息  {{credit}}
+ function hideError(obj){
+    value=$(obj).val();
+    if(value!==''){
+        $(obj).parents().find('.error_mess').text('');
+    }
+ }
+ function checkUser(){
+   var result = document.getElementById("code").value;
+   var error_input=document.getElementById("error_mess");
+   if(result == ""  ){
+     error_input.innerText="请输入短信验证码";
+     document.getElementById("code").focus();
+     return false;
+   }else if(document.getElementById("password")){
+    var password = document.getElementById("password").value;
+      if(password == ""  ){
+	    error_input.innerText="请输入支付密码";
+	    document.getElementById("password").focus();
+	     return false;
+	   }else{
+        document.getElementById("formid").submit();
+      }
+   }else{
+       document.getElementById("formid").submit();
+   }
+   
+    
+}
+</script>
+{{/partial}}
+{{> base}}

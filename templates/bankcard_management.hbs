@@ -1,0 +1,40 @@
+{{#partial "title"}}
+银行卡管理解绑
+{{/partial}}
+{{#head 'headmess'}}
+<a href="javascript:window.history.go(-1);" class="iconfont left_icon">&#xe62d;</a>
+<h2 class="head_title">银行卡管理解绑</h2>
+{{/head}}
+{{#partial "content" }}
+<div class="managementPage inner_common backgroundWhite">
+  <div class="daijiCard">
+    <span>贷记卡(尾号<em class="endCode"></em>)</span>
+    <a href="###" class="fr jiebao">解除绑定</a>
+  </div>
+  <footer>
+      <div class="bankCaedMask">
+            <ul class='footModle'>
+          <li class="first">解绑后银行服务将不可使用，包括快捷支付</li>
+          <li class="sure">确定解除绑定</li>
+          <li class="cancel">取消</li>
+      </ul>
+      </div>
+  </footer>
+</div>
+{{/partial}}
+{{> base}}
+{{#partial 'js'}}
+<script>
+    var bankcode=location.search.slice(1);
+    var  substr=bankcode.substring(bankcode.length-4,bankcode.length)
+    console.log(substr);
+    $(".endCode").html(substr);
+   
+    $('.jiebao').on("click",function(){
+        $(".bankCaedMask").show()
+    })
+     $('.cancel').on("click",function(){
+        $(".bankCaedMask").hide();
+    })
+</script>
+{{/partial}}

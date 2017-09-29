@@ -1,0 +1,52 @@
+{{#head 'headmess'}}
+<h2 class="head_title">订单提交中</h2>
+{{/head}}
+{{#partial "content" }}
+ <div class="vertical submit_wrap">
+	<div class="maxWrap">
+	    <img id="change" src="/static/images/loading.png"> 	
+	    <p>提交中...</p>
+	</div>
+</div>
+{{/partial}}
+{{#partial 'js'}}
+<script>
+   $(function(){
+      var timer=setInterval(function(){
+         submitOrder();
+      },1000)
+   })
+   //刷新
+   var token=getQueryString('token');
+	function submitOrder(){
+	   var token=getQueryString("token");
+	   var parents=$(".submit_wrap");
+	   $.ajax({
+			type:'post',
+			url:'/api/orderStatus',
+			data:{
+				token:token
+			},
+			dataType:'json',
+			success:function(result){
+			    var status=result.status;
+			    console.log(status)
+                if(status==1){
+                   timer=setInterval(function(){
+			         submitOrder();
+			      },2000)
+			      return false
+                }else if(status==2){
+                  window.location.href="/cashier/result?status=2&&token="+token
+                  clearInterval(timer)
+                  return false
+                }else if(status==3){
+                  window.location.href="/cashier/result?status=3&&token="+token
+                  clearInterval(timer)
+                  return false
+                }
+			}
+		})
+	}
+</script>
+{{/partial}}

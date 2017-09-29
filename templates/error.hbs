@@ -1,0 +1,14 @@
+{{#partial "title"}}
+404页面
+{{/partial}}
+{{#partial "content"}}
+<div class="vertical error_z404">
+  <div class="z404">
+	  <image src="/static/images/z404.jpg"/>
+	  <div class="tip">哎呀！页面飞走了...</div>
+	  <p class="mess">{{message}}</p>
+	  <a href="javascript:window.history.go(-1)" class="return_pre">返回上一级</a>
+	</div>
+</div>
+{{/partial}}
+{{> base}}

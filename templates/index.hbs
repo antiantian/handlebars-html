@@ -1,0 +1,90 @@
+
+{{#head 'headmess'}}
+<a href="javascript:void(0);" onclick="leftIcon()" url="{{returnUrl}}" class="iconfont left_icon">&#xe62d;</a>
+<h2 class="head_title">收银台</h2>
+{{/head}}
+{{#partial "title"}}
+收银台
+{{/partial}}
+{{#partial "content" }}
+
+
+{{#list people}}{{this.firstName}} {{this.lastName}}{{/list}}
+
+
+{{#each people}}
+	<li>Name:{{this.firstName}},Age:{{this.lastName}}<li> 
+{{/each}}
+
+<div class="index_wrap">
+    <div class="backgroundWhite">
+      <div class="maxWrap inner_common">
+        <div class="order_num indexOrder marginB5">
+            <span>订单号: <em>{{merchantOrderNo}}</em></span>
+            <span class="indexAmount">金额: <em>{{amount}}元</em></span>
+        </div>
+       </div>  
+    </div>  
+    <div class="backgroundWhite">
+          <div class="maxWrap inner_common index_radio_wrap">
+		    {{#each people}}
+				<li>Name:{{this.firstName}},Age:{{this.lastName}}<li> 
+			{{/each}}
+           {{#each payConfig}}
+                <div class="indexCard clearfix">
+                          {{!-- <i class="iconfont carBank fl">&#xe755;</i> --}}
+                          <img src="public/www/images/icon01.png" alt="" class="fl" />
+                        <span class="fl indexCenter">
+                            <p>{{this.name}}</p>
+                            <p class="server">{{this.desc}}</p>
+                        </span>
+                         <span class="fr">
+                             <label for="pay{{@index}}" class="index_radio {{initIndexClass @index}}">
+                               {{#isFirst @index}}
+                                  <input type="radio" value="{{this.payCode}}" name="a" id="pay{{@index}}" checked="checked">
+                               {{else}}
+                                  <input type="radio" value="{{this.payCode}}" name="a" id="pay{{@index}}">
+                               {{/isFirst}}
+                                <i class="iconfont fr rightConter iconfont_no">&#xe83a;</i>
+                                <i class="iconfont fr rightConter iconfont_had">&#xe600</i>
+                           </label> 
+                        </span>  
+                </div>
+            {{/each}}
+         </div>
+    </div> 
+    <form method='post' id="index_form">
+        <input type="hidden" id="payCode_val" name="payCode" value=""/>
+    </form>
+</div>
+ <footer class="indexFooter">
+        <a href="javascript:void(0);" onclick="toCard()"><p>{{name}}支付{{amount}}元</p></a>
+</footer>
+{{/partial}}
+{{#partial 'js'}}
+    <script>
+     var token=getQueryString('token');
+     function toCard(){
+          var payCode=$("input[type='radio']:checked").val();
+          document.getElementById("index_form").submit();
+      } 
+     $(function() {
+        //表单提交
+         var token=getQueryString('token');
+         document.getElementById('index_form').action="/cashier/chooseCard?token="+token;
+
+        $('label.click').click();
+        var payCode=$("input[type='radio']:checked").val();
+        $("#payCode_val").val(payCode)
+        $('label').click(function(){    
+            $(this).parents('.index_radio_wrap').find('label').removeClass('click');
+            $(this).addClass('click');
+            $(this).find('input[type="radio"]').attr('checked', 'checked');
+            var code=$(this).find('input[type="radio"]').val();
+            $("#payCode_val").val(code)
+        });
+     });   
+    </script>  
+{{/partial}}
+
+{{> base}}

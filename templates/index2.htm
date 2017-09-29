@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+    <meta charset="utf-8" />
+    <title>{{#block "title"}}{{/block}}</title>
+    <link rel="shortcut icon" href="/static/favicon.png">
+    <link type="text/css" rel="stylesheet" href="public/www/css/reset.css"/>
+    <link type="text/css" rel="stylesheet"  href="public/www/css/iconfont/iconfont.css">
+    <link type="text/css" rel="stylesheet" href="public/www/newcss/index.css"/>
+    <link type="text/css" rel="stylesheet" href="public/www/css/zdialog.css"/>
+    <script type="text/javascript" src="public/www/js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="public/www/js/fontsettings.js"></script>
+    <script type="text/javascript" src="public/www/js/common.js"></script>
+    <script type="text/javascript" src="public/www/js/zdialog.js"></script>
+	
+	<script type="text/javascript" src="public/www/js/handlebars-v4.0.10.js"></script>
+	
+	<script type="text/javascript" src="help.js"></script>
+	<script>
+	   Handlebars.registerHelper('agree_button',function(hideheader) {
+			if (hideheader) {
+				return 'hide'
+			}else{
+				return ''
+			}
+		})
+	</script>
+</head>
+<body>
+<div id="index">
+    <div id="bantc_top" class="bor">
+        <h2 style="float:left">办套餐</h2>&nbsp;&nbsp;<input name="tcname" placeholder="请输入套餐名称" /> <input type="button" id="searchShp" value="查询销售品"/>
+    </div>
+    
+      <div id="bantc_list" class="bor">
+        <div>
+            <table id="tclist">
+                <tr>
+                    <th>套餐名称</th>
+                    <th>套餐描述</th>
+                    <th>套餐标识</th>
+                    <th>套餐条数</th>
+                    <th>操作</th>
+                </tr>
+
+                <tr>
+                    <td>Young 19+5元云卡</td>
+                    <td>国内流量500M/月内通话1000分钟...</td>
+                    <td>Young 19+5元云卡</td>
+                    <td>国内流量500M/月内通话1000分钟...</td>
+                    <td>
+                        <input value="加入购物车" type="button" />&nbsp;&nbsp;
+                        <input value="立即办理" type="button" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Young 19+5元云卡</td>
+                    <td>国内流量500M/月内通话1000分钟...</td>
+                    <td>Young 19+5元云卡</td>
+                    <td>国内流量500M/月内通话1000分钟...</td>
+                    <td>
+                        <input value="加入购物车" type="button" />&nbsp;&nbsp;
+                        <input value="立即办理" type="button" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    {{!--<input type="hidden" id="hiddenUrlConfig" value="index" />--}}
+    <input type="hidden" id="hiddenUrl" value="index/view" />
+    <script id="tpl" type="text/x-handlebars-template">
+     {{#each tcs}}
+        <tr>
+            <td>{{tcs.tcname}}</td>
+            <td>{{tcms}}</td>
+            <td>{{tcbs}}</td>
+            <td>{{tcts}}</td>
+            <td>
+                <input value="加入购物车" type="button" />&nbsp;&nbsp;
+                <input value="立即办理" type="button" />
+            </td>
+        </tr>
+    {{/each}}
+    </script>
+</div>
+
+<script>
+//查询销售品
+$("#searchShp").click(function () {
+    var tcname = $("[name=tcname]").val();
+    var source = $("#tpl").html();
+    console.log(source);
+    var template = Handlebars.compile(source);
+    var context = {
+        tcs: [{
+            tcname: "123",
+            tcms: "123",
+            tcbs: "123",
+            tcts: "123"
+        }, {
+            tcname: "123",
+            tcms: "123",
+            tcbs: "123",
+            tcts: "123"
+        }]
+    }
+    var html = template(context);
+    console.log(html);
+    $("#tclist").append(html);
+})
+
+</script>
+
+<table>
+     <thead>
+      <tr>
+          <th>姓名</th>
+           <th>性别</th>
+          <th>年龄</th>
+       </tr>
+      </thead>
+       <tbody id="tableList">
+      
+      </tbody>
+<script id="table-template" type="text/x-handlebars-template">
+       {{#each student}}
+         {{#if name}}
+           {{#compare age 20}}
+             <tr>
+               <td>{{name}}</td>
+               <td>{{transformat sex}}</td>
+               <td>{{age}}</td>
+             </tr>
+           {{else}}
+             <tr>
+               <td>?</td>
+               <td>?</td>
+               <td>?</td>
+             </tr>
+           {{/compare}}
+         {{/if}}
+       {{/each}}
+     </script>
+     
+    </table>
+
+     <!--进行数据处理、html构造-->
+     <script type="text/javascript">
+       $(document).ready(function() {
+         //模拟的json对象
+         var data = {
+                     "student": [
+                         {
+                             "name": "张三",
+                             "sex": "0",
+                            "age": 23
+                         },
+                         {
+                             "name": "李四",
+                             "sex": "0",
+                             "age": 18
+                         },
+                         {
+                             "name": "妞妞",
+                             "sex": "1",
+                             "age": 21
+                         }
+                     ]
+                 };
+         
+         //注册一个Handlebars模版，通过id找到某一个模版，获取模版的html框架
+         //$("#table-template").html()是jquery的语法，不懂的童鞋请恶补。。。
+         var myTemplate = Handlebars.compile($("#table-template").html());
+         
+         //注册一个比较大小的Helper,判断v1是否大于v2
+         Handlebars.registerHelper("compare",function(v1,v2,options){
+           if(v1>v2){
+            //满足添加继续执行
+             return options.fn(this);
+           }else{
+            //不满足条件执行{{else}}部分
+            return options.inverse(this);
+          }
+        });
+        
+         //注册一个翻译用的Helper，0翻译成男，1翻译成女
+         Handlebars.registerHelper("transformat",function(value){
+           if(value==0){
+             return "男";
+          }else if(value==1){
+             return "女";
+         }
+       });
+        
+        //将json对象用刚刚注册的Handlebars模版封装，得到最终的html，插入到基础table中。
+console.log(myTemplate(data))
+       // $('#tableList').html(myTemplate(data));
+$('#tableList').append(myTemplate(data))
+    });
+ </script>
+<script>
+      function leftIcon(){
+         $.DialogByZ.Confirm({
+         Title: "确认要离开收银台", 
+         Content: "您的订单在0小时29分钟内未支付将被取消，请尽快完成支付",
+         BtnL:"确认离开",
+         BtnR:"继续支付",
+         FunL:callSure
+         });
+          $("body").find(".zbox-popup-button").css({"color":"#0ae","pointer-events": "none;"})
+      }  
+     function callSure(){
+        $.DialogByZ.Close();
+        var url=$(".left_icon").attr("url");
+        window.location.href=url;
+     }
+   </script>
+</body>
+</html>
+
+

@@ -1,0 +1,24 @@
+{{#partial "title"}}
+订单结果
+{{/partial}}
+{{#head 'headmess'}}
+<h2 class="head_title">订单结果</h2>
+{{/head}}
+{{#partial "content"}}
+<div class="result_wrap">  
+   {{#PAY_SUCCESS status}}
+	     <div class="block success">
+	      <i class="iconfont gray txt">&#xe641;</i>
+	      <p>支付成功</p>
+	     </div>
+   {{/PAY_SUCCESS}}
+   {{#PAY_FAI status}}
+	     <div class="block fail">
+	      <i class="iconfont gray txt">&#xe65a;</i>
+	      <p>支付失败</p>
+	     </div>
+   {{/PAY_FAI}}
+   <a class="result_return" href='{{returnUrl}}'>返回</a>
+</div>
+{{/partial}}
+{{> base}}

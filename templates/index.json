@@ -1,0 +1,24 @@
+// JavaScript Document
+{
+title:"titles",
+hideheader:false,
+merchantOrderNo:3455,
+amount:3586.00,
+returnUrl:"http://www.qianquduo.com",
+token:"dsdff1235cf",
+payConfig:[{
+	name:"银联支付",
+	desc:"中国银联在线支付服务",
+	payCode:"0"
+}],
+people:[
+    {firstName: "Yehuda", lastName: "Katz"},
+    {firstName: "Carl", lastName: "Lerche"},
+    {firstName: "Alan", lastName: "Johnson"}
+  ]
+}
+Handlebars.registerHelper('fullName', function(person) { 
+  return person.firstName + " " + person.lastName; 
+}); 
+
+

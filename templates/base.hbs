@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+    <meta charset="utf-8" />
+    <title>{{#block "title"}}{{/block}}</title>
+    <link rel="shortcut icon" href="/static/favicon.png">
+    <link type="text/css" rel="stylesheet" href="public/www/css/reset.css"/>
+    <link type="text/css" rel="stylesheet"  href="public/www/css/iconfont/iconfont.css">
+    <link type="text/css" rel="stylesheet" href="public/www/newcss/index.css"/>
+    <link type="text/css" rel="stylesheet" href="public/www/css/zdialog.css"/>
+    <script type="text/javascript" src="public/www/js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="public/www/js/fontsettings.js"></script>
+    <script type="text/javascript" src="public/www/js/common.js"></script>
+    <script type="text/javascript" src="public/www/js/zdialog.js"></script>
+	
+	<script type="text/javascript" src="public/www/js/handlebars-v4.0.10.js"></script>
+	
+	<script type="text/javascript" src="help7.js"></script>
+	<script>
+	   Handlebars.registerHelper('agree_button',function(hideheader) {
+			if (hideheader) {
+				return 'hide'
+			}else{
+				return ''
+			}
+		})
+	</script>
+</head>
+<body>
+{{#unless hideheader}}
+<div class="header_top_wrap">
+    <div class="header_top">
+        {{{_head.headmess}}}
+    </div>
+</div>
+{{/unless}}
+
+<div class="main_wrap {{agree_button hideheader}}">
+{{agree_button this ture}}
+{{agree_button true}}
+    {{#block "content"}}
+    {{/block}}
+</div>
+{{#block "js"}}
+{{/block}}
+<script>
+      function leftIcon(){
+         $.DialogByZ.Confirm({
+         Title: "确认要离开收银台", 
+         Content: "您的订单在0小时29分钟内未支付将被取消，请尽快完成支付",
+         BtnL:"确认离开",
+         BtnR:"继续支付",
+         FunL:callSure
+         });
+          $("body").find(".zbox-popup-button").css({"color":"#0ae","pointer-events": "none;"})
+      }  
+     function callSure(){
+        $.DialogByZ.Close();
+        var url=$(".left_icon").attr("url");
+        window.location.href=url;
+     }
+   </script>
+</body>
+</html>
+
+

@@ -1,0 +1,122 @@
+{{#partial "title"}}
+快捷支付
+{{/partial}}
+{{#head 'headmess'}}
+<a href="javascript:window.history.go(-1);" class="iconfont left_icon">&#xe62d;</a>
+<h2 class="head_title">快捷支付</h2>
+{{/head}}
+{{#partial "content" }}
+<div class="choosePageContent">
+   <div class="backgroundWhite">
+     <div class="maxWrap inner_common">
+        <div class="order_num indexOrder marginB5">
+             <span>订单号: <em>{{merchantOrderNo}}</em></span>
+             <span class="indexAmount">金额: <em>{{amount}}元</em></span>
+        </div>
+     </div>   
+   </div> 
+   <div class="backgroundWhite">
+     <ul class="maxWrap inner_common">
+        {{#each list}}
+            <li>
+                <div class="clerafix choosePage clerafix {{iscredit this.credit}}">
+                    <div style="overflow:hidden;">
+                         {{!-- <img src="/static/img/icon02.png" alt="" class="fl">  --}}
+                         <i class="iconfont fl chooseCardBank">&#xe755;</i> 
+                        <span class="fl centerContent">
+                            <p class="bankname">{{this.bankName}}</p>
+                            {{# if this.credit}}
+                             <p class="secondSpan">信用卡</p>
+                            {{else}}
+                            <p class="secondSpan">贷记卡</p>
+                            {{/if}}
+                        </span>
+                        <span class="fr">
+                            <label for="bank{{@index}}" class="{{initIndexClass @index}}">
+                               {{#isFirst @index}}
+                                  <input type="radio" value="{{this.id}}" name="bank" id="bank{{@index}}" checked="checked">
+                               {{else}}
+                                  <input type="radio" value="{{this.id}}" name="bank" id="bank{{@index}}">
+                               {{/isFirst}}
+                                <i class="iconfont fr rightConter iconfont_no">&#xe83a;</i>
+                                <i class="iconfont fr rightConter iconfont_had">&#xe6ee;</i>
+                           </label>
+                      </span>
+                        {{!-- <i class="iconfont fr rightConter">&#xe600</i> --}}
+                    </div>
+                    <div class="clearfix cardNumber">
+                    <span><a href="./bankcard_management?carBank={{this.bankCard}}"><i class="iconfont jiebang">&#xe7a6;</i></a></span>
+                    <span class="fr cardNumber_b">{{this.bankCard}}</span>
+                </div> 
+                </div>
+            </li>
+        {{/each}}
+     </ul>
+    </div> 
+    <div class="backgroundWhite" style="margin:0.5rem 0">
+      <div class="newbankCard maxWrap inner_common" onclick="javascript:void(0);">
+          <span>使用新卡支付</span>
+          <span><i class="iconfont fr ">&#xe604;</i></span>
+      </div>
+    </div>  
+</div>
+<form method='post' id="smsCode_form">
+        <input type="hidden" id="payCode_val" name="payCode" value="{{payCode}}"/>
+        <input type="hidden" id="ids" name="id" value=""/>
+        <input type="hidden" id="type" name="type" value="1"/>
+</form>
+<form method='post' id="choose_form">
+        <input type="hidden" id="payCode_val" name="payCode" value="{{payCode}}"/>
+</form>
+<footer class="indexFooter">
+        <a href="javascript:void(0);" onclick="getCode()"><p><span class="paybank"></span>支付{{amount}}元</p></a>
+</footer>
+{{/partial}}
+{{> base}}
+{{#partial 'js'}}    
+<script>
+    $(function() {
+         //表单提交
+         var token=getQueryString('token');
+         document.getElementById('choose_form').action="/cashier/bankCardInfo?token="+token;
+
+            //表单提交
+         var token=getQueryString('token');
+         document.getElementById('smsCode_form').action="/cashier/smsCode?token="+token;
+
+        var bankname=$("label.click").parents("li").find(".bankname").text();
+        $('label.click').click();
+        var id=$("input[name='bank']:checked").val();
+        $("#ids").val(id);
+        $(".paybank").text(bankname);
+        $('label').click(function(){    
+            var index=$(this).index();   
+            $(this).parents('.choosePageContent').find('label').removeClass('click');
+            $(this).addClass('click');
+            $(this).find('input[type="radio"]').attr('checked', 'checked');
+            var bankname=$(this).parents("li").find(".bankname").text();
+            $(".paybank").text(bankname);
+            var id=$(this).find('input[type="radio"]').val();
+            $("#ids").val(id);
+        });
+        var token=getQueryString('token');
+        var payCode=getQueryString('payCode');
+        //新卡支付跳转 type=2
+        $(".newbankCard").click(function(){
+            $("#type").val(2);
+            document.getElementById("choose_form").submit();  
+           //window.location.href='/cashier/bankCardInfo?token='+token+"&&payCode="+payCode;
+        })
+    });
+    function getCode(){
+        $("#type").val(1);
+        document.getElementById("smsCode_form").submit();
+        /*
+        var token=getQueryString('token');
+        var payCode=getQueryString('payCode');
+        var id=$("input[name='bank']:checked").val();
+        window.location.href="/cashier/smsCode?id="+id+"&&type=1&&token="+token+"&&payCode="+payCode;
+        */
+    }
+</script>
+{{/partial}}
